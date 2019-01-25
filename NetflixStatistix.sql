@@ -12,7 +12,7 @@ CREATE TABLE Film(
 	Leeftijdsindicatie nvarchar(16),
 	Taal nvarchar(50),
 	Tijdsduur time,
-	Genre nvarchar(20)
+	Genre nvarchar(20),
 );
 INSERT INTO Film VALUES
 (1010,	'The Abominable Bride',				'12',				'Engels',				'01:29',	'Detective'),
@@ -28,12 +28,12 @@ INSERT INTO Film VALUES
 (8017,	'A Clockwork Orange',				'16 jaar en ouder',	'Engels',				'02:16',	'SF');
 
 CREATE TABLE Serie(
-	Serie nvarchar(150),
+	Serie nvarchar(150) PRIMARY KEY,
 	Seizoen nvarchar(6),
 	Leeftijd nvarchar(16),
 	Taal nvarchar(50),
 	Genre nvarchar(20),
-	LijktEenBeetjeOp nvarchar(150)
+	LooksLike nvarchar(150)
 );
 INSERT INTO Serie VALUES
 ('Sherlock',		'S01E01',	'12 jaar en ouder',	'Engels',				'Detective',	'Fargo'),
@@ -41,8 +41,8 @@ INSERT INTO Serie VALUES
 ('Fargo',			'S01E01',	'16 jaar en ouder',	'Engels-Amerikaans',	'Spanning',		'Breaking Bad');
 
 CREATE TABLE Aflevering(
-	Id int,
-	Serie nvarchar(150),
+	Id int PRIMARY KEY,
+	Serie nvarchar(150) FOREIGN KEY REFERENCES Serie(Serie) ON UPDATE CASCADE ON DELETE CASCADE,
 	Seizoen nvarchar(6),
 	Titel nvarchar (150),
 	Tijdsduur time
@@ -99,12 +99,12 @@ INSERT INTO Aflevering VALUES
 (3110,	'Fargo',		'S02E10',	'Palindrome',						'01:08');
 
 CREATE TABLE Account(
-	Abonneenummer int,
+	Abonneenummer int PRIMARY KEY,
 	Naam nvarchar(100),
 	Straat nvarchar(100),
 	Postcode nvarchar(7),
 	Huisnummer nvarchar(4),
-	Plaats nvarchar(100)
+	Plaats nvarchar(100),
 );
 INSERT INTO Account VALUES
 (1215426,	'Fam. Doodewaard',	'Bergslagen',	'4823 KK',	'6',	'Breda'),
@@ -112,15 +112,16 @@ INSERT INTO Account VALUES
 (5285824,	'M. de Hond',		'Tienbunder',	'4823 BN',	'9',	'Breda');
 
 CREATE TABLE Profiel(
-	Abonneenummer int,
+	Profielnummer int PRIMARY KEY,
+	Abonneenummer int FOREIGN KEY REFERENCES Account(Abonneenummer) ON UPDATE CASCADE ON DELETE CASCADE,
 	Profielnaam nvarchar(50),
-	Geboortedatum date
+	Geboortedatum date,
 );
 INSERT INTO Profiel VALUES
-(1215426,	'Martijn',	CONVERT(date, '25-1-1968', 105)),
-(1215426,	'Pawel',	CONVERT(date, '19-8-2001', 105)),
-(5602533,	'Stan',	CONVERT(date, '26-6-1999', 105)),
-(5285824,	'Mark',	CONVERT(date, '19-8-1968', 105))
+(001, 1215426,	'Martijn',	CONVERT(date, '25-1-1968', 105)),
+(002, 1215426,	'Pawel',	CONVERT(date, '19-8-2001', 105)),
+(003, 5602533,	'Stan',	CONVERT(date, '26-6-1999', 105)),
+(004, 5285824,	'Mark',	CONVERT(date, '19-8-1968', 105))
 
 CREATE TABLE Bekeken(
 	Abonneenummer int,
